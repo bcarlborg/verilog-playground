@@ -1,0 +1,28 @@
+#! /Users/beau/dev/oss-cad-suite/bin/vvp
+:ivl_version "13.0 (devel)" "(s20221226-556-gd8c3c51ab)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/Users/beau/dev/oss-cad-suite/lib/ivl/system.vpi";
+:vpi_module "/Users/beau/dev/oss-cad-suite/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/Users/beau/dev/oss-cad-suite/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/Users/beau/dev/oss-cad-suite/lib/ivl/v2005_math.vpi";
+:vpi_module "/Users/beau/dev/oss-cad-suite/lib/ivl/va_math.vpi";
+S_0x12c004c90 .scope module, "mux2to1" "mux2to1" 2 4;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "a";
+    .port_info 1 /INPUT 1 "b";
+    .port_info 2 /INPUT 1 "sel";
+    .port_info 3 /OUTPUT 1 "out";
+o0x130028010 .functor BUFZ 1, c4<z>; HiZ drive
+v0x12c004e80_0 .net "a", 0 0, o0x130028010;  0 drivers
+o0x130028040 .functor BUFZ 1, c4<z>; HiZ drive
+v0x12c014eb0_0 .net "b", 0 0, o0x130028040;  0 drivers
+v0x12c014f50_0 .net "out", 0 0, L_0x12c0150e0;  1 drivers
+o0x1300280a0 .functor BUFZ 1, c4<z>; HiZ drive
+v0x12c014fe0_0 .net "sel", 0 0, o0x1300280a0;  0 drivers
+L_0x12c0150e0 .functor MUXZ 1, o0x130028010, o0x130028040, o0x1300280a0, C4<>;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "circuits/mux/mux2to1.v";

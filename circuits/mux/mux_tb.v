@@ -1,9 +1,8 @@
 `include "circuits/mux/mux2to1.v"
 module mux_tb();
     // Testbench signals for mux2to1
-    reg a2to1, b2to1, sel2to1;  // Inputs are reg for testbench because we want to assign 
-                                // different values to them during our test
-    wire out2to1;               // Output is wire because it is driven by the UUT
+    reg a2to1, b2to1, sel2to1;
+    wire out2to1;
 
     // Instantiate the mux2to1 module as Unit Under Test (UUT)
     mux2to1 uut2to1 (
@@ -13,33 +12,35 @@ module mux_tb();
         .out(out2to1)
     );
 
-    // Test stimulus
+    // Task to verify mux operation
+    task verify_mux2to1;
+        input a_in, b_in, sel_in, expected;
+        begin
+            a2to1 = a_in; b2to1 = b_in; sel2to1 = sel_in;
+            #10;
+            if (out2to1 !== expected) begin
+                $display("[TEST FAILED] a=%b b=%b sel=%b: Expected %b, got %b", 
+                    a_in, b_in, sel_in, expected, out2to1);
+                $finish;
+            end
+        end
+    endtask
+
     initial begin
         // Initialize inputs
         a2to1 = 0; b2to1 = 0; sel2to1 = 0;
-        #10; // Wait 10 time units
-
-        // Test case 1: sel = 0, should select a
-        a2to1 = 1; b2to1 = 0; sel2to1 = 0;
         #10;
-        if (out2to1 !== 1'b1) $display("ERROR: Test case 1 failed! Expected 1, got %b", out2to1);
 
-        // Test case 2: sel = 0, should select a
-        a2to1 = 0; b2to1 = 1; sel2to1 = 0;
-        #10;
-        if (out2to1 !== 1'b0) $display("ERROR: Test case 2 failed! Expected 0, got %b", out2to1);
+        // Test mux2to1
+        verify_mux2to1(0, 0, 0, 0);  // sel=0, should select a=0
+        verify_mux2to1(0, 1, 0, 0);  // sel=0, should select a=0
+        verify_mux2to1(1, 0, 0, 1);  // sel=0, should select a=1
+        verify_mux2to1(1, 1, 0, 1);  // sel=0, should select a=1
+        verify_mux2to1(0, 0, 1, 0);  // sel=1, should select b=0
+        verify_mux2to1(1, 0, 1, 0);  // sel=1, should select b=0
+        verify_mux2to1(0, 1, 1, 1);  // sel=1, should select b=1
+        verify_mux2to1(1, 1, 1, 1);  // sel=1, should select b=1
 
-        // Test case 3: sel = 1, should select b
-        a2to1 = 0; b2to1 = 1; sel2to1 = 1;
-        #10;
-        if (out2to1 !== 1'b1) $display("ERROR: Test case 3 failed! Expected 1, got %b", out2to1);
-
-        // Test case 4: sel = 1, should select b
-        a2to1 = 1; b2to1 = 0; sel2to1 = 1;
-        #10;
-        if (out2to1 !== 1'b0) $display("ERROR: Test case 4 failed! Expected 0, got %b", out2to1);
-
-        // Add monitor statements to display results
         $display("Test completed");
         $finish;
     end

@@ -17,8 +17,6 @@ BUILD_DIR = build
 
 SRCS = $(shell find $(SRC_DIR) -name '*.v')
 
-# Generate corresponding paths for dependency files for the source files
-SRC_DEPS := $(SRCS:$(SRC_DIR)/%.v=$(BUILD_DIR)/%.mk)
 
 # Find all testbench files (_tb.v) in circuits subdirectories
 TEST_SRCS := $(shell find $(SRC_DIR) -name '*_tb.v')
@@ -27,6 +25,8 @@ TEST_SRCS := $(shell find $(SRC_DIR) -name '*_tb.v')
 # that we want to create
 TEST_VVPS := $(TEST_SRCS:$(SRC_DIR)/%.v=$(BUILD_DIR)/%.vvp)
 
+# Generate makefiles that have rules for the testbench vvp files
+TEST_DEPS := $(TEST_SRCS:$(SRC_DIR)/%.v=$(BUILD_DIR)/%.mk)
 
 #######################################################################
 # Phony Rules
@@ -51,9 +51,9 @@ clean:
 #######################################################################
 
 # Include rules from dependency files
-# If the dependency files do not exist, the rule below will be executed
-# to generate them
--include $(SRC_DEPS)
+# If the dependency files do not exist, the rule below for *.mk
+# targets will generate them
+-include $(TEST_DEPS)
 
 # Catch all compile Verilog source files into VVP test bench files
 # Will catch all rules with targets ending in .vvp from the dependency files

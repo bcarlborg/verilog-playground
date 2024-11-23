@@ -4,7 +4,6 @@ IVERILOG_FLAGS = -Wall
 # vvp is the verilog simulator
 VVP = vvp
 
-
 # Directories
 SRC_DIR = circuits
 BUILD_DIR = build
@@ -69,13 +68,13 @@ $(BUILD_DIR)/%.vvp:
 $(BUILD_DIR)/%.mk: $(SRC_DIR)/%.v
 	@echo "[make]: Generating dependency file for $<"
 	@mkdir -p $(dir $@)
-	# Add a target and colon to a tmp file
+	@# Add a target and colon to a tmp file
 	@echo "$(@:.mk=.vvp):" > $@.tmp1
-	# Add the dependencies to the tmp file
+	@# Add the dependencies to the tmp file
 	@$(IVERILOG) -M $@.tmp2 $<
-	# Concatenate the target and colon with the dependencies
+	@# Concatenate the target and colon with the dependencies
 	@cat $@.tmp1 $@.tmp2 > $@.tmp3
-	# Remove newlines and replace with spaces so that we have a proper rule
+	@# Remove newlines and replace with spaces so that we have a proper rule
 	@tr '\n' ' ' < $@.tmp3 > $@
 	# Remove temporary files
 	@rm $@.tmp*

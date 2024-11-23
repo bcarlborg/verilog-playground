@@ -215,12 +215,12 @@ module mux_tb();
         // Test mux4to1
         verify_mux4to1(0, 0, 0, 0, 0, 0, 0);  // sel0=0, sel1=0, should select a=0
         verify_mux4to1(1, 0, 0, 0, 0, 0, 1);  // sel0=0, sel1=0, should select a=1
-        verify_mux4to1(0, 0, 0, 0, 0, 1, 0);  // sel0=0, sel1=1, should select b=0
-        verify_mux4to1(0, 1, 0, 0, 0, 1, 1);  // sel0=0, sel1=1, should select b=1
-        verify_mux4to1(0, 0, 0, 0, 1, 0, 0);  // sel0=1, sel1=0, should select c=0
-        verify_mux4to1(0, 0, 1, 0, 1, 0, 1);  // sel0=1, sel1=0, should select c=1
-        verify_mux4to1(0, 0, 0, 0, 1, 1, 0);  // sel0=1, sel1=0, should select c=0
-        verify_mux4to1(0, 0, 1, 1, 1, 1, 1);  // sel0=1, sel1=0, should select c=1
+        verify_mux4to1(0, 0, 0, 0, 1, 0, 0);  // sel0=1, sel1=0, should select b=0
+        verify_mux4to1(0, 1, 0, 0, 1, 0, 1);  // sel0=1, sel1=0, should select b=1
+        verify_mux4to1(0, 0, 0, 0, 0, 1, 0);  // sel0=0, sel1=1, should select c=0
+        verify_mux4to1(0, 0, 1, 0, 0, 1, 1);  // sel0=0, sel1=1, should select c=1
+        verify_mux4to1(0, 0, 0, 0, 1, 1, 0);  // sel0=1, sel1=1, should select c=0
+        verify_mux4to1(0, 0, 0, 1, 1, 1, 1);  // sel0=1, sel1=1, should select c=1
         $display("Mux4to1 test completed");
 
         // Test mux8to1

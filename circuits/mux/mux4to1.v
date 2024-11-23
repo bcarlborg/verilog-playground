@@ -14,5 +14,5 @@ module mux4to1(
   input sel1,
   output out
 );
-  assign out = sel0 ? (sel1 ? d : c) : (sel1 ? b : a);
+  assign out = sel1 ? (sel0 ? d : c) : (sel0 ? b : a);
 endmodule

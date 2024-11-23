@@ -2,9 +2,5 @@
 
 A short list of TODOs that I am keeping for this project. Generally used as a dumping ground to track whatever thing I want to make next.
 
-- Think a little bit more about how to track the dependencies between files with make
-  - Make the TB files one to one with the test files?
-  - Think a little bit more about how the dependencies between these files can be tracked and
-    accounted for in the make file.
-  - Question: Can I use a makefile in each directory that describes the other files that
-    are dependencies of the current files?
+- [ ] I setup my mux and dmux chips wrong. I think I set them up in a big endian way.
+  - I want sel0 to be the least significant bit in each of these.

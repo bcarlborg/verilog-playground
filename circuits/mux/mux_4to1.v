@@ -10,9 +10,8 @@ module mux_4to1(
   input b,
   input c,
   input d,
-  input sel0,
-  input sel1,
+  input [1:0] sel,
   output out
 );
-  assign out = sel1 ? (sel0 ? d : c) : (sel0 ? b : a);
+  assign out = sel[1] ? (sel[0] ? d : c) : (sel[0] ? b : a);
 endmodule

@@ -14,7 +14,8 @@ module mux_tb();
     wire out_2to1;
 
     // Testbench signals for mux_4to1
-    reg a_4to1, b_4to1, c_4to1, d_4to1, sel0_4to1, sel1_4to1;
+    reg a_4to1, b_4to1, c_4to1, d_4to1;
+    reg [1:0] sel_4to1;
     wire out_4to1;
 
     // Testbench signals for mux_8to1
@@ -62,8 +63,7 @@ module mux_tb();
         .b(b_4to1),
         .c(c_4to1),
         .d(d_4to1),
-        .sel0(sel0_4to1),
-        .sel1(sel1_4to1),
+        .sel(sel_4to1),
         .out(out_4to1)
     );
 
@@ -139,18 +139,20 @@ module mux_tb();
 
     // Task to verify mux_4to1 operation
     task verify_mux_4to1;
-        input a_in, b_in, c_in, d_in, sel0_in, sel1_in, expected;
+        input a_in, b_in, c_in, d_in;
+        input [1:0] sel_in;
+        input expected;
         begin
             a_4to1 = a_in; b_4to1 = b_in; c_4to1 = c_in; d_4to1 = d_in;
-            sel0_4to1 = sel0_in; sel1_4to1 = sel1_in;
+            sel_4to1 = sel_in;
             #10;
             if (out_4to1 !== expected) begin
                 $display("[TEST FAILED] a=%b b=%b c=%b d=%b sel0=%b sel1=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, sel0_in, sel1_in, expected, out_4to1);
+                    a_in, b_in, c_in, d_in, sel_in[0], sel_in[1], expected, out_4to1);
                 $finish;
             end else begin
                 $display("[TEST PASSED] a=%b b=%b c=%b d=%b sel0=%b sel1=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, sel0_in, sel1_in, expected, out_4to1);
+                    a_in, b_in, c_in, d_in, sel_in[0], sel_in[1], expected, out_4to1);
             end
         end
     endtask
@@ -203,12 +205,12 @@ module mux_tb();
             a16_4to1 = a_in; b16_4to1 = b_in; c16_4to1 = c_in; d16_4to1 = d_in; sel16_4to1 = sel_in;
             #10;
             if (out16_4to1 !== expected) begin
-                $display("[TEST FAILED] a=%b b=%b c=%b d=%b sel0=%b sel1=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, sel_in[0], sel_in[1], expected, out16_4to1);
+                $display("[TEST FAILED] a=%b b=%b c=%b d=%b sel=%b: Expected %b, got %b", 
+                    a_in, b_in, c_in, d_in, sel_in, expected, out16_4to1);
                 $finish;
             end else begin
-                $display("[TEST PASSED] a=%b b=%b c=%b d=%b sel0=%b sel1=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, sel_in[0], sel_in[1], expected, out16_4to1);
+                $display("[TEST PASSED] a=%b b=%b c=%b d=%b sel=%b: Expected %b, got %b", 
+                    a_in, b_in, c_in, d_in, sel_in, expected, out16_4to1);
             end
         end
     endtask
@@ -223,12 +225,12 @@ module mux_tb();
             a16_8to1 = a_in; b16_8to1 = b_in; c16_8to1 = c_in; d16_8to1 = d_in; e16_8to1 = e_in; f16_8to1 = f_in; g16_8to1 = g_in; h16_8to1 = h_in; sel16_8to1 = sel_in;
             #10;
             if (out16_8to1 !== expected) begin
-                $display("[TEST FAILED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel0=%b sel1=%b sel2=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel_in[0], sel_in[1], sel_in[2], expected, out16_8to1);
+                $display("[TEST FAILED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel=%b: Expected %b, got %b", 
+                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel_in, expected, out16_8to1);
                 $finish;
             end else begin
-                $display("[TEST PASSED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel0=%b sel1=%b sel2=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel_in[0], sel_in[1], sel_in[2], expected, out16_8to1);
+                $display("[TEST PASSED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel=%b: Expected %b, got %b", 
+                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel_in, expected, out16_8to1);
             end
         end
     endtask
@@ -287,7 +289,7 @@ module mux_tb();
     initial begin
         // Initialize inputs to 0
         a_2to1 = 0; b_2to1 = 0; sel_2to1 = 0;
-        a_4to1 = 0; b_4to1 = 0; c_4to1 = 0; d_4to1 = 0; sel0_4to1 = 0; sel1_4to1 = 0;
+        a_4to1 = 0; b_4to1 = 0; c_4to1 = 0; d_4to1 = 0; sel_4to1 = 2'b00;
         a_8to1 = 0; b_8to1 = 0; c_8to1 = 0; d_8to1 = 0; e_8to1 = 0; f_8to1 = 0; g_8to1 = 0; h_8to1 = 0;
         sel0_8to1 = 0; sel1_8to1 = 0; sel2_8to1 = 0;
         in_1to2 = 0; sel_1to2 = 0;
@@ -297,7 +299,7 @@ module mux_tb();
         // Test mux_2to1
         verify_mux_2to1(0, 0, 0, 0);  // sel=0, should select a=0
         verify_mux_2to1(0, 1, 0, 0);  // sel=0, should select a=0
-        verify_mux_2to1(1, 0, 0, 1);  // sel=0, should select a=1
+        verify_mux_2to1(1, 0, 0, 1);  // sel=0, should select a=h77771
         verify_mux_2to1(1, 1, 0, 1);  // sel=0, should select a=1
         verify_mux_2to1(0, 0, 1, 0);  // sel=1, should select b=0
         verify_mux_2to1(1, 0, 1, 0);  // sel=1, should select b=0
@@ -306,14 +308,14 @@ module mux_tb();
         $display("Mux_2to1 test completed");
 
         // Test mux_4to1
-        verify_mux_4to1(0, 0, 0, 0, 0, 0, 0);  // sel0=0, sel1=0, should select a=0
-        verify_mux_4to1(1, 0, 0, 0, 0, 0, 1);  // sel0=0, sel1=0, should select a=1
-        verify_mux_4to1(0, 0, 0, 0, 1, 0, 0);  // sel0=1, sel1=0, should select b=0
-        verify_mux_4to1(0, 1, 0, 0, 1, 0, 1);  // sel0=1, sel1=0, should select b=1
-        verify_mux_4to1(0, 0, 0, 0, 0, 1, 0);  // sel0=0, sel1=1, should select c=0
-        verify_mux_4to1(0, 0, 1, 0, 0, 1, 1);  // sel0=0, sel1=1, should select c=1
-        verify_mux_4to1(0, 0, 0, 0, 1, 1, 0);  // sel0=1, sel1=1, should select c=0
-        verify_mux_4to1(0, 0, 0, 1, 1, 1, 1);  // sel0=1, sel1=1, should select c=1
+        verify_mux_4to1(0, 0, 0, 0, 2'b00, 0);  // sel=00, should select a=0
+        verify_mux_4to1(1, 0, 0, 0, 2'b00, 1);  // sel=00, should select a=1
+        verify_mux_4to1(0, 0, 0, 0, 2'b01, 0);  // sel=01, should select b=0
+        verify_mux_4to1(0, 1, 0, 0, 2'b01, 1);  // sel=01, should select b=1
+        verify_mux_4to1(0, 0, 0, 0, 2'b10, 0);  // sel=10, should select c=0
+        verify_mux_4to1(0, 0, 1, 0, 2'b10, 1);  // sel=10, should select c=1
+        verify_mux_4to1(0, 0, 0, 0, 2'b11, 0);  // sel=11, should select c=0
+        verify_mux_4to1(0, 0, 0, 1, 2'b11, 1);  // sel=11, should select c=1
         $display("Mux_4to1 test completed");
 
         // Test mux_8to1

@@ -21,7 +21,7 @@ module mux_tb();
 
     // Testbench signals for mux16_2to1
     reg [15:0] a16to1, b16to1;
-    reg [3:0] sel16to1;
+    reg sel16to1;
     wire [15:0] out16to1;
 
     // Testbench signals for dmux_1to2
@@ -154,7 +154,7 @@ module mux_tb();
     // Task to verify mux16_2to1 operation
     task verify_mux16_2to1;
         input [15:0] a_in, b_in;
-        input [3:0] sel_in;
+        input sel_in;
         input [15:0] expected;
 
         begin
@@ -275,6 +275,15 @@ module mux_tb();
         verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0);  // sel0=1, sel1=1, sel2=1, should select h=0
         verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1);  // sel0=1, sel1=1, sel2=1, should select h=1
         $display("Mux_8to1 test completed");
+
+        // test mux16_2to1
+        verify_mux16_2to1(16'h0000, 16'hFFFF, 0, 16'h0000);  // select a=0000, expect first input
+        verify_mux16_2to1(16'hAAAA, 16'h5555, 0, 16'hAAAA);  // select a=alternating 1010
+        verify_mux16_2to1(16'h0000, 16'hFFFF, 1, 16'hFFFF);  // select b=all 1s
+        verify_mux16_2to1(16'hFFFF, 16'h0000, 1, 16'h0000);  // select b=all 0s
+        verify_mux16_2to1(16'h1234, 16'h5678, 0, 16'h1234);  // select a=specific pattern
+        verify_mux16_2to1(16'hABCD, 16'hEF01, 1, 16'hEF01);  // select b=specific pattern
+        $display("Mux16_2to1 test completed");
 
         // Test dmux_1to2
         verify_dmux_1to2(0, 0, 0, 0);  // sel=0, should select out0=0

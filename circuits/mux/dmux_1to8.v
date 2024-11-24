@@ -8,7 +8,7 @@
 // When sel0 is 1 & sel1 is 0 & sel2 is 1, out5 is a
 // When sel0 is 0 & sel1 is 1 & sel2 is 1, out6 is a
 // When sel0 is 1 & sel1 is 1 & sel2 is 1, out7 is a
-module dmux1to8(
+module dmux_1to8(
   input in,
   input sel0,
   input sel1,

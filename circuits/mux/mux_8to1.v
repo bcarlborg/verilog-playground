@@ -9,7 +9,7 @@
 // When sel0=1 & sel1=0 & sel2=1 out is f.
 // When sel0=0 & sel1=1 & sel2=1 out is g.
 // When sel0=1 & sel1=1 & sel2=1 out is h.
-module mux8to1(
+module mux_8to1(
   input a,
   input b,
   input c,

@@ -4,7 +4,7 @@
 // when sel0:1 & sel1:0, out1 is a.
 // when sel0:0 & sel1:1, out2 is a.
 // when sel0:1 & sel1:1, out3 is a.
-module dmux1to4(
+module dmux_1to4(
   input in,
   input sel0,
   input sel1,

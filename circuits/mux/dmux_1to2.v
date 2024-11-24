@@ -5,9 +5,8 @@
 module dmux_1to2(
   input in,
   input sel,
-  output out0,
-  output out1
+  output [1:0] out
 );
-  assign out0 = sel ? 0 : in;
-  assign out1 = sel ? in : 0;
+  assign out[0] = sel ? 0 : in;
+  assign out[1] = sel ? in : 0;
 endmodule

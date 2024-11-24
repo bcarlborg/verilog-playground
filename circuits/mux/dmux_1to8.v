@@ -10,9 +10,11 @@
 // When sel0 is 1 & sel1 is 1 & sel2 is 1, out7 is a
 module dmux_1to8(
   input in,
+  // TODO(bcarlborg): Convert this into a bus
   input sel0,
   input sel1,
   input sel2,
+  // TODO(bcarlborg): Convert this into a bus
   output out0,
   output out1,
   output out2,

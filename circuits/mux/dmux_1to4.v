@@ -6,15 +6,11 @@
 // when sel0:1 & sel1:1, out3 is a.
 module dmux_1to4(
   input in,
-  input sel0,
-  input sel1,
-  output out0,
-  output out1,
-  output out2,
-  output out3
+  input [1:0] sel,
+  output [3:0] out
 );
-  assign out0 = sel1 ? 0 : (sel0? 0 : in);
-  assign out1 = sel1 ? 0 : (sel0 ? in : 0);
-  assign out2 = sel1 ? (sel0 ? 0 : in) : 0;
-  assign out3 = sel1 ? (sel0 ? in : 0) : 0;
+  assign out[0] = sel[1] ? 0 : (sel[0] ? 0 : in);
+  assign out[1] = sel[1] ? 0 : (sel[0] ? in : 0);
+  assign out[2] = sel[1] ? (sel[0] ? 0 : in) : 0;
+  assign out[3] = sel[1] ? (sel[0] ? in : 0) : 0;
 endmodule

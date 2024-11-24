@@ -6,6 +6,7 @@
 // When sel0=1 & sel1=0 out is c.
 // When sel0=1 & sel1=1 out is d.
 module mux_4to1(
+  // TODO(bcarlborg): Convert this into a bus
   input a,
   input b,
   input c,

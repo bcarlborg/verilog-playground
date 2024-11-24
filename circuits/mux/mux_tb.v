@@ -39,11 +39,12 @@ module mux_tb();
 
     // Testbench signals for dmux_1to2
     reg in_1to2, sel_1to2;
-    wire out0_1to2, out1_1to2;
+    wire [1:0]out_1to2;
 
     // Testbench signals for dmux_1to4
-    reg in_1to4, sel0_1to4, sel1_1to4;
-    wire out0_1to4, out1_1to4, out2_1to4, out3_1to4;
+    reg in_1to4;
+    reg [1:0] sel_1to4;
+    wire [3:0] out_1to4;
 
     // Testbench signals for dmux_1to8
     reg in_1to8, sel0_1to8, sel1_1to8, sel2_1to8;
@@ -102,16 +103,14 @@ module mux_tb();
     dmux_1to2 uut_1to2 (
         .in(in_1to2),
         .sel(sel_1to2),
-        .out0(out0_1to2),
-        .out1(out1_1to2)
+        .out(out_1to2)
     );
 
     // Instantiate the dmux_1to4 module as Unit Under Test (UUT)
     dmux_1to4 uut_1to4 (
         .in(in_1to4),
-        .sel0(sel0_1to4),
-        .sel1(sel1_1to4),
-        .out0(out0_1to4), .out1(out1_1to4), .out2(out2_1to4), .out3(out3_1to4)
+        .sel(sel_1to4),
+        .out(out_1to4)
     );
 
     // Instantiate the dmux_1to8 module as Unit Under Test (UUT)
@@ -237,34 +236,39 @@ module mux_tb();
 
     // Task to verify dmux_1to2 operation
     task verify_dmux_1to2;
-        input in_in, sel_in, expected0, expected1;
+        input in_in, sel_in;
+        input [1:0] expected;
+
         begin
             in_1to2 = in_in; sel_1to2 = sel_in;
             #10;
-            if (out0_1to2 !== expected0 || out1_1to2 !== expected1) begin
-                $display("[TEST FAILED] in=%b sel=%b: Expected %b %b, got %b %b", 
-                    in_in, sel_in, expected0, expected1, out0_1to2, out1_1to2);
+            if (out_1to2 !== expected) begin
+                $display("[TEST FAILED] in=%b sel=%b: Expected %b, got %b", 
+                    in_in, sel_in, expected, out_1to2);
                 $finish;
             end else begin
-                $display("[TEST PASSED] in=%b sel=%b: Expected %b %b, got %b %b", 
-                    in_in, sel_in, expected0, expected1, out0_1to2, out1_1to2);
+                $display("[TEST PASSED] in=%b sel=%b: Expected %b, got %b", 
+                    in_in, sel_in, expected, out_1to2);
             end
         end
     endtask
 
     // Task to verify dmux_1to4 operation
     task verify_dmux_1to4;
-        input in_in, sel0_in, sel1_in, expected0, expected1, expected2, expected3;
+        input in_in;
+        input [1:0] sel_in;
+        input [3:0] expected;
+
         begin
-            in_1to4 = in_in; sel0_1to4 = sel0_in; sel1_1to4 = sel1_in;
+            in_1to4 = in_in; sel_1to4 = sel_in;
             #10;
-            if (out0_1to4 !== expected0 || out1_1to4 !== expected1 || out2_1to4 !== expected2 || out3_1to4 !== expected3) begin
-                $display("[TEST FAILED] in=%b sel0=%b sel1=%b: Expected %b %b %b %b, got %b %b %b %b", 
-                    in_in, sel0_in, sel1_in, expected0, expected1, expected2, expected3, out0_1to4, out1_1to4, out2_1to4, out3_1to4);
+            if (out_1to4 !== expected) begin
+                $display("[TEST FAILED] in=%b sel=%b: Expected %b, got %b", 
+                    in_in, sel_in, expected, out_1to4);
                 $finish;
             end else begin
-                $display("[TEST PASSED] in=%b sel0=%b sel1=%b: Expected %b %b %b %b, got %b %b %b %b", 
-                    in_in, sel0_in, sel1_in, expected0, expected1, expected2, expected3, out0_1to4, out1_1to4, out2_1to4, out3_1to4);
+                $display("[TEST PASSED] in=%b sel=%b: Expected %b, got %b", 
+                    in_in, sel_in, expected, out_1to4);
             end
         end
     endtask
@@ -293,7 +297,7 @@ module mux_tb();
         a_8to1 = 0; b_8to1 = 0; c_8to1 = 0; d_8to1 = 0; e_8to1 = 0; f_8to1 = 0; g_8to1 = 0; h_8to1 = 0;
         sel0_8to1 = 0; sel1_8to1 = 0; sel2_8to1 = 0;
         in_1to2 = 0; sel_1to2 = 0;
-        in_1to4 = 0; sel0_1to4 = 0; sel1_1to4 = 0;
+        in_1to4 = 0; sel_1to4 = 0;
         #10;
 
         // Test mux_2to1
@@ -368,21 +372,21 @@ module mux_tb();
         $display("Mux16_8to1 test completed");
 
         // Test dmux_1to2
-        verify_dmux_1to2(0, 0, 0, 0);  // sel=0, should select out0=0
-        verify_dmux_1to2(1, 0, 1, 0);  // sel=0, should select out0=1
-        verify_dmux_1to2(0, 1, 0, 0);  // sel=1, should select out1=0
-        verify_dmux_1to2(1, 1, 0, 1);  // sel=1, should select out1=1
+        verify_dmux_1to2(0, 0, 2'b00);  // sel=0, should select out0=0
+        verify_dmux_1to2(1, 0, 2'b01);  // sel=0, should select out0=1
+        verify_dmux_1to2(0, 1, 2'b00);  // sel=1, should select out1=0
+        verify_dmux_1to2(1, 1, 2'b10);  // sel=1, should select out1=1
         $display("Dmux_1to2 test completed");
 
         // Test dmux_1to4
-        verify_dmux_1to4(0, 0, 0, 0, 0, 0, 0);  // sel0=0, sel1=0, should select out0=0
-        verify_dmux_1to4(1, 0, 0, 1, 0, 0, 0);  // sel0=0, sel1=0, should select out0=1
-        verify_dmux_1to4(0, 1, 0, 0, 0, 0, 0);  // sel0=1, sel1=0, should select out1=0
-        verify_dmux_1to4(1, 1, 0, 0, 1, 0, 0);  // sel0=1, sel1=0, should select out1=1
-        verify_dmux_1to4(0, 0, 1, 0, 0, 0, 0);  // sel0=0, sel1=1, should select out3=0
-        verify_dmux_1to4(1, 0, 1, 0, 0, 1, 0);  // sel0=0, sel1=1, should select out3=1
-        verify_dmux_1to4(0, 1, 1, 0, 0, 0, 0);  // sel0=1, sel1=1, should select out4=0
-        verify_dmux_1to4(1, 1, 1, 0, 0, 0, 1);  // sel0=1, sel1=1, should select out4=1
+        verify_dmux_1to4(0, 2'b00, 4'b0000);  // sel=00, should select out0=0
+        verify_dmux_1to4(1, 2'b00, 4'b0001);  // sel=00, should select out0=1
+        verify_dmux_1to4(0, 2'b01, 4'b0000);  // sel=01, should select out1=0
+        verify_dmux_1to4(1, 2'b01, 4'b0010);  // sel=01, should select out1=1
+        verify_dmux_1to4(0, 2'b10, 4'b0000);  // sel=10, should select out2=0
+        verify_dmux_1to4(1, 2'b10, 4'b0100);  // sel=10, should select out2=1
+        verify_dmux_1to4(0, 2'b11, 4'b0000);  // sel=11, should select out3=0
+        verify_dmux_1to4(1, 2'b11, 4'b1000);  // sel=11, should select out3=1
         $display("Dmux_1to4 test completed!");
 
         // Test dmux_1to8

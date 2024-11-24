@@ -10,6 +10,7 @@
 // When sel0=0 & sel1=1 & sel2=1 out is g.
 // When sel0=1 & sel1=1 & sel2=1 out is h.
 module mux_8to1(
+  // TODO(bcarlborg): Convert this into a bus
   input a,
   input b,
   input c,
@@ -18,6 +19,7 @@ module mux_8to1(
   input f,
   input g,
   input h,
+  // TODO(bcarlborg): Convert this into a bus
   input sel0,
   input sel1,
   input sel2,

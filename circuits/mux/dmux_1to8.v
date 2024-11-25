@@ -11,25 +11,16 @@
 module dmux_1to8(
   input in,
   // TODO(bcarlborg): Convert this into a bus
-  input sel0,
-  input sel1,
-  input sel2,
+  input [2:0] sel,
   // TODO(bcarlborg): Convert this into a bus
-  output out0,
-  output out1,
-  output out2,
-  output out3,
-  output out4,
-  output out5,
-  output out6,
-  output out7
+  output [7:0] out
 );
-  assign out0 = sel2 ? 0 : (sel1 ? 0 : (sel0 ? 0 : in));
-  assign out1 = sel2 ? 0 : (sel1 ? 0 : (sel0 ? in : 0));
-  assign out2 = sel2 ? 0 : (sel1 ? (sel0 ? 0 : in) : 0);
-  assign out3 = sel2 ? 0 : (sel1 ? (sel0 ? in : 0) : 0);
-  assign out4 = sel2 ? (sel1 ? 0 : (sel0 ? 0 : in)) : 0;
-  assign out5 = sel2 ? (sel1 ? 0 : (sel0 ? in : 0)) : 0;
-  assign out6 = sel2 ? (sel1 ? (sel0 ? 0 : in) : 0) : 0;
-  assign out7 = sel2 ? (sel1 ? (sel0 ? in : 0) : 0) : 0;
+  assign out[0] = sel[2] ? 0 : (sel[1] ? 0 : (sel[0] ? 0 : in));
+  assign out[1] = sel[2] ? 0 : (sel[1] ? 0 : (sel[0] ? in : 0));
+  assign out[2] = sel[2] ? 0 : (sel[1] ? (sel[0] ? 0 : in) : 0);
+  assign out[3] = sel[2] ? 0 : (sel[1] ? (sel[0] ? in : 0) : 0);
+  assign out[4] = sel[2] ? (sel[1] ? 0 : (sel[0] ? 0 : in)) : 0;
+  assign out[5] = sel[2] ? (sel[1] ? 0 : (sel[0] ? in : 0)) : 0;
+  assign out[6] = sel[2] ? (sel[1] ? (sel[0] ? 0 : in) : 0) : 0;
+  assign out[7] = sel[2] ? (sel[1] ? (sel[0] ? in : 0) : 0) : 0;
 endmodule

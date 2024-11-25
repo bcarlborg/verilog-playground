@@ -20,13 +20,14 @@ module mux_tb();
     wire out_4to1;
 
     // Testbench signals for mux_8to1
-    reg a_8to1, b_8to1, c_8to1, d_8to1, e_8to1, f_8to1, g_8to1, h_8to1, sel0_8to1, sel1_8to1, sel2_8to1;
+    reg [7:0] in_8to1;
+    reg [2:0] sel_8to1;
     wire out_8to1;
 
     // Testbench signals for mux16_2to1
-    reg [15:0] a16_2to1, b16_2to1;
-    reg sel16_2to1;
-    wire [15:0] out16_2to1;
+    reg [15:0] in0_16_2to1, in1_16_2to1;
+    reg sel_16_2to1;
+    wire [15:0] out_16_2to1;
 
     // Testbench signals for mux16_4to1
     reg [15:0] a16_4to1, b16_4to1, c16_4to1, d16_4to1;
@@ -68,26 +69,17 @@ module mux_tb();
 
     // Instantiate the mux_8to1 module as Unit Under Test (UUT)
     mux_8to1 uut_8to1 (
-        .a(a_8to1),
-        .b(b_8to1),
-        .c(c_8to1),
-        .d(d_8to1),
-        .e(e_8to1),
-        .f(f_8to1),
-        .g(g_8to1),
-        .h(h_8to1),
-        .sel0(sel0_8to1),
-        .sel1(sel1_8to1),
-        .sel2(sel2_8to1),
+        .in(in_8to1),
+        .sel(sel_8to1),
         .out(out_8to1)
     );
 
     // Instantiate the mux16_2to1 module as Unit Under Test (UUT)
     mux16_2to1 uut16_2to1 (
-        .a(a16_2to1),
-        .b(b16_2to1),
-        .sel(sel16_2to1),
-        .out(out16_2to1)
+        .in_0(in0_16_2to1),
+        .in_1(in1_16_2to1),
+        .sel(sel_16_2to1),
+        .out(out_16_2to1)
     );
 
     // Instantiate the mux16_4to1 module as Unit Under Test (UUT)
@@ -124,75 +116,77 @@ module mux_tb();
     // Task to verify mux_2to1 operation
     task verify_mux_2to1;
         input [1:0] in;
-        input sel_in, expected;
+        input sel, expected;
 
         begin
-            in_2to1 = in; sel_2to1 = sel_in;
+            in_2to1 = in; sel_2to1 = sel;
             #10;
             if (out_2to1 !== expected) begin
                 $display("[TEST FAILED] in=%b sel=%b: Expected %b, got %b", 
-                    in, sel_in, expected, out_2to1);
+                    in, sel, expected, out_2to1);
                 $finish;
             end else begin
                 $display("[TEST PASSED] in=%b sel=%b: Expected %b, got %b", 
-                    in, sel_in, expected, out_2to1);
+                    in, sel, expected, out_2to1);
             end
         end
     endtask
 
     // Task to verify mux_4to1 operation
     task verify_mux_4to1;
-        input [3:0] in_in;
-        input [1:0] sel_in;
+        input [3:0] in;
+        input [1:0] sel;
         input expected;
         begin
-            in_4to1 = in_in; sel_4to1 = sel_in;
+            in_4to1 = in; sel_4to1 = sel;
             #10;
             if (out_4to1 !== expected) begin
                 $display("[TEST FAILED] in=%b sel0=%b sel1=%b: Expected %b, got %b", 
-                    in_in, sel_in[0], sel_in[1], expected, out_4to1);
+                    in, sel[0], sel[1], expected, out_4to1);
                 $finish;
             end else begin
                 $display("[TEST PASSED] in=%b sel0=%b sel1=%b: Expected %b, got %b", 
-                    in_in, sel_in[0], sel_in[1], expected, out_4to1);
+                    in, sel[0], sel[1], expected, out_4to1);
             end
         end
     endtask
 
     // Task to verify mux_8to1 operation
     task verify_mux_8to1;
-        input a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel0_in, sel1_in, sel2_in, expected;
+        input [7:0] in;
+        input [2:0] sel;
+        input expected;
         begin
-            a_8to1 = a_in; b_8to1 = b_in; c_8to1 = c_in; d_8to1 = d_in; e_8to1 = e_in; f_8to1 = f_in; g_8to1 = g_in; h_8to1 = h_in;
-            sel0_8to1 = sel0_in; sel1_8to1 = sel1_in; sel2_8to1 = sel2_in;
+            in_8to1 = in;
+            sel_8to1 = sel;
             #10;
             if (out_8to1 !== expected) begin
-                $display("[TEST FAILED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel0=%b sel1=%b sel2=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel0_in, sel1_in, sel2_in, expected, out_8to1);
+                $display("[TEST FAILED] in=%b sel=%b: Expected %b, got %b", 
+                    in, sel, expected, out_8to1);
                 $finish;
             end else begin
-                $display("[TEST PASSED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel0=%b sel1=%b sel2=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel0_in, sel1_in, sel2_in, expected, out_8to1);
+                $display("[TEST PASSED] in=%b sel=%b: Expected %b, got %b", 
+                    in, sel, expected, out_8to1);
             end
         end
     endtask
 
     // Task to verify mux16_2to1 operation
     task verify_mux16_2to1;
-        input [15:0] a_in, b_in;
-        input sel_in;
+        input [15:0] in_0, in_1;
+        input sel;
         input [15:0] expected;
 
         begin
-            a16_2to1 = a_in; b16_2to1 = b_in; sel16_2to1 = sel_in;
+            in0_16_2to1 = in_0; in1_16_2to1 = in_1; sel_16_2to1 = sel;
             #10;
-            if (out16_2to1 !== expected) begin
-                $display("[TEST FAILED] a=%b b=%b sel=%b: Expected %b, got %b", 
-                    a_in, b_in, sel_in, expected, out16_2to1);
+            if (out_16_2to1 !== expected) begin
+                $display("[TEST FAILED] in[0]=%b in[1]=%b sel=%b: Expected %b, got %b", 
+                    in_0, in_1, sel, expected, out_16_2to1);
                 $finish;
             end else begin
-                $display("[TEST PASSED] a=%b b=%b sel=%b: Expected %b, got %b", 
-                    a_in, b_in, sel_in, expected, out16_2to1);
+                $display("[TEST PASSED] in[0]=%b in[1]=%b sel=%b: Expected %b, got %b", 
+                    in_0, in_1, sel, expected, out_16_2to1);
             end
         end
     endtask
@@ -219,20 +213,20 @@ module mux_tb();
 
     // Task to verify mux16_8to1 operation
     task verify_mux16_8to1;
-        input [15:0] a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in;
-        input [2:0] sel_in;
+        input [15:0] in0, in1, in2, in3, in4, in5, in6, in7;
+        input [2:0] sel;
         input [15:0] expected;
 
         begin
-            a16_8to1 = a_in; b16_8to1 = b_in; c16_8to1 = c_in; d16_8to1 = d_in; e16_8to1 = e_in; f16_8to1 = f_in; g16_8to1 = g_in; h16_8to1 = h_in; sel16_8to1 = sel_in;
+            a16_8to1 = in0; b16_8to1 = in1; c16_8to1 = in2; d16_8to1 = in3; e16_8to1 = in4; f16_8to1 = in5; g16_8to1 = in6; h16_8to1 = in7; sel16_8to1 = sel;
             #10;
             if (out16_8to1 !== expected) begin
-                $display("[TEST FAILED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel_in, expected, out16_8to1);
+                $display("[TEST FAILED] in0=%b in1=%b in2=%b in3=%b in4=%b in5=%b in6=%b in7=%b sel=%b: Expected %b, got %b", 
+                    in0, in1, in2, in3, in4, in5, in6, in7, sel, expected, out16_8to1);
                 $finish;
             end else begin
-                $display("[TEST PASSED] a=%b b=%b c=%b d=%b e=%b f=%b g=%b h=%b sel=%b: Expected %b, got %b", 
-                    a_in, b_in, c_in, d_in, e_in, f_in, g_in, h_in, sel_in, expected, out16_8to1);
+                $display("[TEST PASSED] in0=%b in1=%b in2=%b in3=%b in4=%b in5=%b in6=%b in7=%b sel=%b: Expected %b, got %b", 
+                    in0, in1, in2, in3, in4, in5, in6, in7, sel, expected, out16_8to1);
             end
         end
     endtask
@@ -296,11 +290,11 @@ module mux_tb();
     endtask
 
     initial begin
+        // TODO(bcarlborg): Do I need to initialize all the inputs?
         // Initialize inputs to 0
         in_2to1 = 0; sel_2to1 = 0;
         in_4to1 = 0; sel_4to1 = 2'b00;
-        a_8to1 = 0; b_8to1 = 0; c_8to1 = 0; d_8to1 = 0; e_8to1 = 0; f_8to1 = 0; g_8to1 = 0; h_8to1 = 0;
-        sel0_8to1 = 0; sel1_8to1 = 0; sel2_8to1 = 0;
+        in_8to1 = 0; sel_8to1 = 3'b000;
         in_1to2 = 0; sel_1to2 = 0;
         in_1to4 = 0; sel_1to4 = 0;
         in_1to8 = 0; sel_1to8 = 0;
@@ -308,52 +302,52 @@ module mux_tb();
 
         // Test mux_2to1
         $display("Testing Mux_2to1");
-        verify_mux_2to1(2'b00, 0, 0);  // sel=0, should select a=0
-        verify_mux_2to1(2'b01, 0, 1);  // sel=0, should select a=1
-        verify_mux_2to1(2'b00, 1, 0);  // sel=0, should select a=1
-        verify_mux_2to1(2'b10, 1, 1);  // sel=1, should select b=0
+        verify_mux_2to1(.in(2'b00), .sel(0), .expected(0));
+        verify_mux_2to1(.in(2'b01), .sel(0), .expected(1));
+        verify_mux_2to1(.in(2'b00), .sel(1), .expected(0));
+        verify_mux_2to1(.in(2'b10), .sel(1), .expected(1));
 
         // Test mux_4to1
         $display("Testing Mux_4to1");
-        verify_mux_4to1(4'b0000, 2'b00, 0);  // sel=00, should select a=0
-        verify_mux_4to1(4'b0001, 2'b00, 1);  // sel=00, should select a=1
-        verify_mux_4to1(4'b0000, 2'b01, 0);  // sel=01, should select b=0
-        verify_mux_4to1(4'b0010, 2'b01, 1);  // sel=01, should select b=1
-        verify_mux_4to1(4'b0000, 2'b10, 0);  // sel=10, should select c=0
-        verify_mux_4to1(4'b0100, 2'b10, 1);  // sel=10, should select c=1
-        verify_mux_4to1(4'b0000, 2'b11, 0);  // sel=11, should select c=0
-        verify_mux_4to1(4'b1000, 2'b11, 1);  // sel=11, should select c=1
+        verify_mux_4to1(.in(4'b0000), .sel(2'b00), .expected(0));
+        verify_mux_4to1(.in(4'b0001), .sel(2'b00), .expected(1));
+        verify_mux_4to1(.in(4'b0000), .sel(2'b01), .expected(0));
+        verify_mux_4to1(.in(4'b0010), .sel(2'b01), .expected(1));
+        verify_mux_4to1(.in(4'b0000), .sel(2'b10), .expected(0));
+        verify_mux_4to1(.in(4'b0100), .sel(2'b10), .expected(1));
+        verify_mux_4to1(.in(4'b0000), .sel(2'b11), .expected(0));
+        verify_mux_4to1(.in(4'b1000), .sel(2'b11), .expected(1));
 
         // Test mux_8to1
         $display("Testing Mux_8to1");
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);  // sel0=0, sel1=0, sel2=0, should select a=0
-        verify_mux_8to1(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);  // sel0=0, sel1=0, sel2=0, should select a=1
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);  // sel0=1, sel1=0, sel2=0, should select b=0
-        verify_mux_8to1(0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1);  // sel0=1, sel1=0, sel2=0, should select b=1
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b000), .expected(0));
+        verify_mux_8to1(.in(8'b00000001), .sel(3'b000), .expected(1));
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b001), .expected(0));
+        verify_mux_8to1(.in(8'b00000010), .sel(3'b001), .expected(1));
 
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0);  // sel0=0, sel1=1, sel2=0, should select c=0
-        verify_mux_8to1(0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1);  // sel0=0, sel1=1, sel2=0, should select c=1
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0);  // sel0=1, sel1=1, sel2=0, should select d=0
-        verify_mux_8to1(0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1);  // sel0=1, sel1=1, sel2=0, should select d=1
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b010), .expected(0));
+        verify_mux_8to1(.in(8'b00000100), .sel(3'b010), .expected(1));
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b011), .expected(0));
+        verify_mux_8to1(.in(8'b00001000), .sel(3'b011), .expected(1));
 
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0);  // sel0=0, sel1=0, sel2=1, should select e=0
-        verify_mux_8to1(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1);  // sel0=0, sel1=0, sel2=1, should select e=1
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0);  // sel0=1, sel1=0, sel2=1, should select f=0
-        verify_mux_8to1(0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1);  // sel0=1, sel1=0, sel2=1, should select f=1
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b100), .expected(0));
+        verify_mux_8to1(.in(8'b00010000), .sel(3'b100), .expected(1));
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b101), .expected(0));
+        verify_mux_8to1(.in(8'b00100000), .sel(3'b101), .expected(1));
 
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0);  // sel0=0, sel1=1, sel2=1, should select g=0
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1);  // sel0=0, sel1=1, sel2=1, should select g=1
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0);  // sel0=1, sel1=1, sel2=1, should select h=0
-        verify_mux_8to1(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1);  // sel0=1, sel1=1, sel2=1, should select h=1
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b110), .expected(0));
+        verify_mux_8to1(.in(8'b01000000), .sel(3'b110), .expected(1));
+        verify_mux_8to1(.in(8'b00000000), .sel(3'b111), .expected(0));
+        verify_mux_8to1(.in(8'b10000000), .sel(3'b111), .expected(1));
 
         // test mux16_2to1
         $display("Testing Mux16_2to1");
-        verify_mux16_2to1(16'h0000, 16'hFFFF, 0, 16'h0000);  // select a=0000, expect first input
-        verify_mux16_2to1(16'hAAAA, 16'h5555, 0, 16'hAAAA);  // select a=alternating 1010
-        verify_mux16_2to1(16'h0000, 16'hFFFF, 1, 16'hFFFF);  // select b=all 1s
-        verify_mux16_2to1(16'hFFFF, 16'h0000, 1, 16'h0000);  // select b=all 0s
-        verify_mux16_2to1(16'h1234, 16'h5678, 0, 16'h1234);  // select a=specific pattern
-        verify_mux16_2to1(16'hABCD, 16'hEF01, 1, 16'hEF01);  // select b=specific pattern
+        verify_mux16_2to1(.in_0(16'h0000), .in_1(16'hFFFF), .sel(0), .expected(16'h0000));
+        verify_mux16_2to1(.in_0(16'hAAAA), .in_1(16'h5555), .sel(0), .expected(16'hAAAA));
+        verify_mux16_2to1(.in_0(16'h0000), .in_1(16'hFFFF), .sel(1), .expected(16'hFFFF));
+        verify_mux16_2to1(.in_0(16'hFFFF), .in_1(16'h0000), .sel(1), .expected(16'h0000));
+        verify_mux16_2to1(.in_0(16'h1234), .in_1(16'h5678), .sel(0), .expected(16'h1234));
+        verify_mux16_2to1(.in_0(16'hABCD), .in_1(16'hEF01), .sel(1), .expected(16'hEF01));
 
         // Test mux16_4to1
         $display("Testing Mux16_4to1");
@@ -364,14 +358,38 @@ module mux_tb();
 
         // Test mux16_8to1
         $display("Testing Mux16_8to1");
-        verify_mux16_8to1(16'h0010, 16'hFFFF, 16'hAAAA, 16'h5555, 16'hABCD, 16'hEF01, 16'h1234, 16'h5678, 3'b000, 16'h0010);  // select a=16'h0010
-        verify_mux16_8to1(16'h0000, 16'hFAFF, 16'hAAAA, 16'h5555, 16'hABCD, 16'hEF01, 16'h1234, 16'h5678, 3'b001, 16'hFAFF);  // select b=16'hFAFF
-        verify_mux16_8to1(16'h0000, 16'hFFFF, 16'hABCA, 16'h5555, 16'hABCD, 16'hEF01, 16'h1234, 16'h5678, 3'b010, 16'hABCA);  // select c=16'hABCA
-        verify_mux16_8to1(16'h0000, 16'hFFFF, 16'hAAAA, 16'hCCCC, 16'hABCD, 16'hEF01, 16'h1234, 16'h5678, 3'b011, 16'hCCCC);  // select d=16'hCCCC
-        verify_mux16_8to1(16'h0000, 16'hFFFF, 16'hAAAA, 16'h5555, 16'h1111, 16'hEF01, 16'h1234, 16'h5678, 3'b100, 16'h1111);  // select e=16h1111'
-        verify_mux16_8to1(16'h0000, 16'hFFFF, 16'hAAAA, 16'h5555, 16'hABCD, 16'h2222, 16'h1234, 16'h5678, 3'b101, 16'h2222);  // select f=16'h2222
-        verify_mux16_8to1(16'h0000, 16'hFFFF, 16'hAAAA, 16'h5555, 16'hABCD, 16'hEF01, 16'hCCCC, 16'h5678, 3'b110, 16'hCCCC);  // select g=16'hCCCC
-        verify_mux16_8to1(16'h0000, 16'hFFFF, 16'hAAAA, 16'h5555, 16'hABCD, 16'hEF01, 16'h1234, 16'h7777, 3'b111, 16'h7777);  // select h=16'h7777
+        verify_mux16_8to1(
+            .in0(16'h0010), .in1(16'hFFFF), .in2(16'hAAAA), .in3(16'h5555), .in4(16'hABCD), .in5(16'hEF01), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b000), .expected(16'h0010)
+        );
+        verify_mux16_8to1(
+            .in0(16'h0000), .in1(16'hFAFF), .in2(16'hAAAA), .in3(16'h5555), .in4(16'hABCD), .in5(16'hEF01), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b001), .expected(16'hFAFF)
+        );
+        verify_mux16_8to1(
+            .in0(16'h0000), .in1(16'hFFFF), .in2(16'hABCA), .in3(16'h5555), .in4(16'hABCD), .in5(16'hEF01), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b010), .expected(16'hABCA)
+        );
+        verify_mux16_8to1(
+            .in0(16'h0000), .in1(16'hFFFF), .in2(16'hABCA), .in3(16'h5555), .in4(16'hABCD), .in5(16'hEF01), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b011), .expected(16'h5555)
+        );
+        verify_mux16_8to1(
+            .in0(16'h0000), .in1(16'hFFFF), .in2(16'hAAAA), .in3(16'h5555), .in4(16'h1111), .in5(16'hEF01), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b100), .expected(16'h1111)
+        );
+        verify_mux16_8to1(
+            .in0(16'h0000), .in1(16'hFFFF), .in2(16'hAAAA), .in3(16'h5555), .in4(16'hABCD), .in5(16'h2222), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b101), .expected(16'h2222)
+        );
+        verify_mux16_8to1(
+            .in0(16'h0000), .in1(16'hFFFF), .in2(16'hAAAA), .in3(16'h5555), .in4(16'hABCD), .in5(16'h2222), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b110), .expected(16'h1234)
+        );
+        verify_mux16_8to1(
+            .in0(16'h0000), .in1(16'hFFFF), .in2(16'hAAAA), .in3(16'h5555), .in4(16'hABCD), .in5(16'h2222), .in6(16'h1234), .in7(16'h5678),
+            .sel(3'b111), .expected(16'h5678)
+        );
 
         // Test dmux_1to2
         $display("Testing Dmux_1to2");

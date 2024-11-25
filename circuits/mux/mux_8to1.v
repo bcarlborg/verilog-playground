@@ -11,35 +11,27 @@
 // When sel0=1 & sel1=1 & sel2=1 out is h.
 module mux_8to1(
   // TODO(bcarlborg): Convert this into a bus
-  input a,
-  input b,
-  input c,
-  input d,
-  input e,
-  input f,
-  input g,
+  input [7:0] in,
   input h,
   // TODO(bcarlborg): Convert this into a bus
-  input sel0,
-  input sel1,
-  input sel2,
+  input [2:0] sel,
   output out
 );
-  assign out = sel2
-                ? (sel1
-                  ? (sel0
-                    ? h
-                    : g)
-                  : (sel0
-                    ? f
-                    : e)
+  assign out = sel[2]
+                ? (sel[1]
+                  ? (sel[0]
+                    ? in[7]
+                    : in[6])
+                  : (sel[0]
+                    ? in[5]
+                    : in[4])
                   )
-                : (sel1
-                  ? (sel0
-                    ? d
-                    : c)
-                  : (sel0
-                    ? b
-                    : a)
+                : (sel[1]
+                  ? (sel[0]
+                    ? in[3]
+                    : in[2])
+                  : (sel[0]
+                    ? in[1]
+                    : in[0])
                   );
 endmodule

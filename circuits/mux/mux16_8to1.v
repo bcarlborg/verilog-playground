@@ -1,5 +1,4 @@
 module mux16_8to1(
-    // TODO(bcarlborg): Convert to one bus not 8 separate inputs
     input [15:0] a, b, c, d, e, f, g, h,
     input [2:0] sel,
     output [15:0] out

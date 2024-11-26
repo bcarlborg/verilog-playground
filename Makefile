@@ -31,16 +31,14 @@ TEST_DEPS := $(TEST_SRCS:$(SRC_DIR)/%.v=$(BUILD_DIR)/%.mk)
 # Phony Rules
 #######################################################################
 
-.PHONY: run-tests
 build-tests: $(TEST_VVPS)
 
 .PHONY: run-tests
 run-tests: $(TEST_VVPS)
 	@for test in $^; do \
-		echo "============== Running $$test =============="; \
+		echo "============== Running $$(test) =============="; \
 		$(VVP) $$test; \
 	done
-
 
 clean:
 	rm -rf $(BUILD_DIR)

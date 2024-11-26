@@ -10,9 +10,7 @@
 // When sel0 is 1 & sel1 is 1 & sel2 is 1, out7 is a
 module dmux_1to8(
   input in,
-  // TODO(bcarlborg): Convert this into a bus
   input [2:0] sel,
-  // TODO(bcarlborg): Convert this into a bus
   output [7:0] out
 );
   assign out[0] = sel[2] ? 0 : (sel[1] ? 0 : (sel[0] ? 0 : in));

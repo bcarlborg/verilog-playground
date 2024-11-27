@@ -1,3 +1,5 @@
+`ifndef MUX_8TO1_V
+`define MUX_8TO1_V
 
 // MUX 8 TO 1
 // Multiplexer with eight inputs and three selectors.
@@ -35,3 +37,5 @@ module mux_8to1(
                     : in[0])
                   );
 endmodule
+
+`endif

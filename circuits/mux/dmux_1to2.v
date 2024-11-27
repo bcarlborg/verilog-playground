@@ -1,3 +1,6 @@
+`ifndef DMUX_1TO2_V
+`define DMUX_1TO2_V
+
 // DEMULTIPLEXER 1 TO 2
 // Demultiplexer with one input, two outputs, and 1 selector.
 // When sel is 0, out0 is in and out1 is 0.
@@ -10,3 +13,5 @@ module dmux_1to2(
   assign out[0] = sel ? 0 : in;
   assign out[1] = sel ? in : 0;
 endmodule
+
+`endif

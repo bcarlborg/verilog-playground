@@ -1,3 +1,5 @@
+`ifndef MUX_4TO1_V
+`define MUX_4TO1_V
 
 // MUX 4 TO 1
 // Multiplexer with four inputs and two selector.
@@ -13,3 +15,5 @@ module mux_4to1(
 );
   assign out = sel[1] ? (sel[0] ? in[3] : in[2]) : (sel[0] ? in[1] : in[0]);
 endmodule
+
+`endif

@@ -1,3 +1,6 @@
+`ifndef DMUX_1TO8_V
+`define DMUX_1TO8_V
+
 // DEMULTIPLEXER 1 TO 8
 // Demultiplexer with one input, eight outputs, and 3 selectors.
 // When sel0 is 0 & sel1 is 0 & sel2 is 0, out0 is a.
@@ -22,3 +25,5 @@ module dmux_1to8(
   assign out[6] = sel[2] ? (sel[1] ? (sel[0] ? 0 : in) : 0) : 0;
   assign out[7] = sel[2] ? (sel[1] ? (sel[0] ? in : 0) : 0) : 0;
 endmodule
+
+`endif

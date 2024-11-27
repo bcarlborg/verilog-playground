@@ -1,3 +1,6 @@
+`ifndef DECODER_4TO16_V
+`define DECODER_4TO16_V
+
 module decoder_4to16(
   input [3:0] in,
   output [15:0] out
@@ -20,3 +23,5 @@ module decoder_4to16(
             : in[0] ? 16'b0000000000000010
             : 16'b0000000000000001;
 endmodule
+
+`endif

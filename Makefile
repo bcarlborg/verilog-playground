@@ -36,9 +36,13 @@ build-tests: $(TEST_VVPS)
 .PHONY: run-tests
 run-tests: $(TEST_VVPS)
 	@for test in $^; do \
-		echo "============== Running $$(test) =============="; \
+		echo "============== Running $$test =============="; \
 		$(VVP) $$test; \
 	done
+
+run-test-%: $(shell find $(BUILD_DIR) -name '%.vvp')
+	@echo "============== Running $< =============="; \
+	$(VVP) $<; \
 
 clean:
 	rm -rf $(BUILD_DIR)
